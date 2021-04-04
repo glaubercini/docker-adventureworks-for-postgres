@@ -1,0 +1,22 @@
+#https://hub.docker.com/_/postgres
+FROM postgres:9.4
+
+RUN localedef -i pt_BR -c -f UTF-8 -A /usr/share/locale/locale.alias pt_BR.UTF-8
+ENV LANG pt_BR.utf8
+
+#https://github.com/lorint/AdventureWorks-for-Postgres
+RUN apt-get update
+RUN apt-get -y install unzip ruby dos2unix
+
+RUN mkdir /data
+COPY postgres_adventure_works_install.sql /data/
+COPY postgres_adventure_works_update_csvs.rb /data/
+COPY postgres_adventure_works_data.zip /data/
+RUN cd /data && \
+    unzip postgres_adventure_works_data.zip && \
+    rm postgres_adventure_works_data.zip && \
+    ruby postgres_adventure_works_update_csvs.rb && \
+    rm postgres_adventure_works_update_csvs.rb
+
+COPY postgres_adventure_works_install.sh /docker-entrypoint-initdb.d/
+RUN dos2unix /docker-entrypoint-initdb.d/*.sh

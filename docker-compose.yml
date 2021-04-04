@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres_aw:ver9.4
+    build:
+      context: .
+      dockerfile: postgres_dockerfile
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: blog
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      lan:
+        ipv4_address: 100.5.0.2
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      lan:
+        ipv4_address: 100.5.0.3
+
+networks:
+  lan:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 100.5.0.0/24
+         gateway: 100.5.0.1
