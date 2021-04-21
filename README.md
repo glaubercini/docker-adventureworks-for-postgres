@@ -7,6 +7,7 @@ This repository holds almost-entire-copy of strategy started [here](https://gith
 * The AdventureWorks zip file was added;
 * A simple network was created;
 * No docker user for Postgres;
+* Postgres version 13.2;
 * A volume was created.
 
 ## How to build
